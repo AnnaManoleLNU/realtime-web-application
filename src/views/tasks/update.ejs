@@ -1,11 +1,11 @@
-<h1>Update task</h1>
+<h1>Update issue</h1>
 <form class="row g-3" method="post" action="./tasks/<%= viewData?.id %>/update">
   <div class="col-md-12">
     <label class="form-label" for="descriptionInput">
       Description
     </label>
     <input type="text" class="form-control" id="descriptionInput" name="description"
-      placeholder="Update task description here" value="<%= viewData?.description %>" required="required"
+       value="<%= viewData?.description %>" required="required"
       autofocus="autofocus" />
   </div>
   <div class="col-12">
@@ -18,6 +18,6 @@
     </div>
   </div>
   <div class="col-12">
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-dark">Update</button>
   </div>
 </form>

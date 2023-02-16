@@ -1,4 +1,4 @@
-<h1>Delete task</h1>
+<h1>Delete issue</h1>
 <form class="row g-3" method="post" action="./tasks/<%= viewData?.id %>/delete">
   <input type="hidden" name="id" value="<%= viewData?.id %>" />
   <div class="col-md-12">
@@ -6,7 +6,7 @@
       Description
     </label>
     <input type="text" class="form-control" id="descriptionInput"
-      placeholder="Update task description here" value="<%= viewData?.description %>"
+       value="<%= viewData?.description %>"
       disabled />
   </div>
   <div class="col-12">
@@ -19,6 +19,6 @@
     </div>
   </div>
   <div class="col-12">
-    <button type="submit" class="btn btn-primary" autofocus="autofocus">Delete</button>
+    <button type="submit" class="btn btn-dark" autofocus="autofocus">Delete</button>
   </div>
 </form>
