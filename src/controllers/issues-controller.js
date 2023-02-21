@@ -1,18 +1,18 @@
 /**
- * Module for the TasksController.
+ * Module for the IssuesController.
  *
  * @author Mats Loock
  * @version 2.0.0
  */
 
-import { Task } from '../models/task.js'
+import { Issue } from '../models/issue.js'
 
 /**
  * Encapsulates a controller.
  */
-export class TasksController {
+export class IssuesController {
   /**
-   * Displays a list of tasks.
+   * Displays a list of issues.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -21,47 +21,47 @@ export class TasksController {
   async index (req, res, next) {
     try {
       const viewData = {
-        tasks: (await Task.find())
-          .map(task => task.toObject())
+        issues: (await Issue.find())
+          .map(issue => issue.toObject())
       }
 
-      res.render('tasks/index', { viewData })
+      res.render('issues/index', { viewData })
     } catch (error) {
       next(error)
     }
   }
 
   /**
-   * Returns a HTML form for creating a new task.
+   * Returns a HTML form for creating a new issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async create (req, res) {
-    res.render('tasks/create')
+    res.render('issues/create')
   }
 
   /**
-   * Creates a new task.
+   * Creates a new issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async createPost (req, res) {
     try {
-      const task = new Task({
+      const issue = new Issue({
         description: req.body.description
       })
 
-      await task.save()
+      await issue.save()
 
       // --------------------------------------------------------------------------
-      // Socket.IO: Send the created task to all subscribers.
+      // Socket.IO: Send the created issue to all subscribers.
       //
-      res.io.emit('tasks/create', task.toObject())
+      res.io.emit('issues/create', issue.toObject())
       // --------------------------------------------------------------------------
 
-      req.session.flash = { type: 'success', text: 'The task was created successfully.' }
+      req.session.flash = { type: 'success', text: 'The issue was created successfully.' }
       res.redirect('.')
     } catch (error) {
       req.session.flash = { type: 'danger', text: error.message }
@@ -70,16 +70,16 @@ export class TasksController {
   }
 
   /**
-   * Returns a HTML form for updating a task.
+   * Returns a HTML form for updating a issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async update (req, res) {
     try {
-      const task = await Task.findById(req.params.id)
+      const issue = await Issue.findById(req.params.id)
 
-      res.render('tasks/update', { viewData: task.toObject() })
+      res.render('issues/update', { viewData: issue.toObject() })
     } catch (error) {
       req.session.flash = { type: 'danger', text: error.message }
       res.redirect('..')
@@ -87,26 +87,26 @@ export class TasksController {
   }
 
   /**
-   * Updates a specific task.
+   * Updates a specific issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async updatePost (req, res) {
     try {
-      const task = await Task.findById(req.params.id)
+      const issue = await Issue.findById(req.params.id)
 
-      if (task) {
-        task.description = req.body.description
-        task.done = req.body.done === 'on'
+      if (issue) {
+        issue.description = req.body.description
+        issue.done = req.body.done === 'on'
 
-        await task.save()
+        await issue.save()
 
-        req.session.flash = { type: 'success', text: 'The task was updated successfully.' }
+        req.session.flash = { type: 'success', text: 'The issue was updated successfully.' }
       } else {
         req.session.flash = {
           type: 'danger',
-          text: 'The task you attempted to update was removed by another user after you got the original values.'
+          text: 'The issue you attempted to update was removed by another user after you got the original values.'
         }
       }
       res.redirect('..')
@@ -117,16 +117,16 @@ export class TasksController {
   }
 
   /**
-   * Returns a HTML form for deleting a task.
+   * Returns a HTML form for deleting an issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async delete (req, res) {
     try {
-      const task = await Task.findById(req.params.id)
+      const issue = await Issue.findById(req.params.id)
 
-      res.render('tasks/delete', { viewData: task.toObject() })
+      res.render('issues/delete', { viewData: issue.toObject() })
     } catch (error) {
       req.session.flash = { type: 'danger', text: error.message }
       res.redirect('..')
@@ -134,16 +134,16 @@ export class TasksController {
   }
 
   /**
-   * Deletes the specified task.
+   * Deletes the specified issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    */
   async deletePost (req, res) {
     try {
-      await Task.findByIdAndDelete(req.body.id)
+      await Issue.findByIdAndDelete(req.body.id)
 
-      req.session.flash = { type: 'success', text: 'The task was deleted successfully.' }
+      req.session.flash = { type: 'success', text: 'The issue was deleted successfully.' }
       res.redirect('..')
     } catch (error) {
       req.session.flash = { type: 'danger', text: error.message }

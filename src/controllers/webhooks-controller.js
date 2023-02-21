@@ -5,7 +5,7 @@
  * @version 2.0.0
  */
 
-import { Task } from '../models/task.js'
+import { Issue } from '../models/issue.js'
 
 /**
  * Encapsulates a controller.
@@ -31,7 +31,7 @@ export class WebhooksController {
   }
 
   /**
-   * Receives a webhook, and creates a new task.
+   * Receives a webhook, and creates a new issue.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -41,21 +41,25 @@ export class WebhooksController {
     try {
       // Only interested in issues events. (But still, respond with a 200
       // for events not supported.)
-      let task = null
+      let issue = null
       if (req.body.event_type === 'issue') {
-        task = new Task({
-          description: req.body.object_attributes.title
+        issue = new Issue({
+          // EDITED - MIGHT NOT WORK!!!!
+          title: req.body.object_attributes.title,
+          description: req.body.object_attributes.description
         })
+        // log the request object when an issue is recieved from gitlab.
+        console.log(req.body)
 
-        await task.save()
+        await issue.save()
       }
 
       // It is important to respond quickly!
       res.status(200).end()
 
       // Put this last because socket communication can take long time.
-      if (task) {
-        res.io.emit('tasks/create', task.toObject())
+      if (issue) {
+        res.io.emit('issues/create', issue.toObject())
       }
     } catch (error) {
       const err = new Error('Internal Server Error')

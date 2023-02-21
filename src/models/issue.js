@@ -1,14 +1,20 @@
 /**
- * Mongoose model Task.
+ * Mongoose model Issue.
  *
- * @author Mats Loock
- * @version 2.0.0
+ * @author Anna Manole
+ * @version 1.0.0
  */
 
 import mongoose from 'mongoose'
 
 // Create a schema.
 const schema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1
+  },
   description: {
     type: String,
     required: true,
@@ -42,4 +48,4 @@ schema.virtual('id').get(function () {
 })
 
 // Create a model using the schema.
-export const Task = mongoose.model('Task', schema)
+export const Issue = mongoose.model('Issue', schema)

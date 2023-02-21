@@ -1,36 +1,37 @@
 import '../socket.io/socket.io.js'
 
-const taskTemplate = document.querySelector('#task-template')
+const issueTemplate = document.querySelector('#issue-template')
 
-// If taskTemplate is not present on the page, just ignore and do not listen for task messages.
-if (taskTemplate) {
+// If issueTemplate is not present on the page, just ignore and do not listen for issue messages.
+if (issueTemplate) {
   // Create a socket connection using Socket.IO.
   const socket = window.io()
 
-  // Listen for "tasks/create" message from the server.
-  socket.on('tasks/create', (task) => insertTaskRow(task))
+  // Listen for "issues/create" message from the server.
+  socket.on('issues/create', (issue) => insertIssueRow(issue))
 }
 
 /**
- * Inserts a task row at the end of the task table.
+ * Inserts an issue row at the end of the issues table.
  *
- * @param {object} task - The task to add.
+ * @param {object} issue - The issue to add.
  */
-function insertTaskRow (task) {
-  const taskList = document.querySelector('#task-list')
+function insertIssueRow (issue) {
+  const issueList = document.querySelector('#issue-list')
+  console.log(issue)
 
-  // Only add a task if it's not already in the list.
-  if (!taskList.querySelector(`[data-id="${task.id}"]`)) {
-    const taskNode = taskTemplate.content.cloneNode(true)
+  // Only add a issue if it's not already in the list.
+  if (!issueList.querySelector(`[data-id="${issue.id}"]`)) {
+    const issueNode = issueTemplate.content.cloneNode(true)
 
-    const taskRow = taskNode.querySelector('tr')
-    const doneCheck = taskNode.querySelector('input[type=checkbox]')
-    const descriptionCell = taskNode.querySelector('td:nth-child(2)')
-    const [updateLink, deleteLink] = taskNode.querySelectorAll('a')
+    const issueRow = issueNode.querySelector('tr')
+    const doneCheck = issueNode.querySelector('input[type=checkbox]')
+    const descriptionCell = issueNode.querySelector('td:nth-child(2)')
+    const [updateLink, deleteLink] = issueNode.querySelectorAll('a')
 
-    taskRow.setAttribute('data-id', task.id)
+    issueRow.setAttribute('data-id', issue.id)
 
-    if (task.done) {
+    if (issue.done) {
       doneCheck.setAttribute('checked', '')
       descriptionCell.classList.add('text-muted')
     } else {
@@ -38,11 +39,11 @@ function insertTaskRow (task) {
       descriptionCell.classList.remove('text-muted')
     }
 
-    descriptionCell.textContent = task.description
+    descriptionCell.textContent = issue.description
 
-    updateLink.href = `./tasks/${task.id}/update`
-    deleteLink.href = `./tasks/${task.id}/delete`
+    updateLink.href = `./issues/${issue.id}/update`
+    deleteLink.href = `./issues/${issue.id}/delete`
 
-    taskList.appendChild(taskNode)
+    issueList.appendChild(issueNode)
   }
 }

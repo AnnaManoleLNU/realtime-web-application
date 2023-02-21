@@ -7,18 +7,18 @@
       <th>Action</th>
     </tr>
   </thead>
-  <tbody id="task-list">
-    <% if (viewData?.tasks?.length) { %>
-      <% for (const task of viewData.tasks) { %>
-        <tr data-id="<%= task.id %>">
+  <tbody id="issue-list">
+    <% if (viewData?.issues?.length) { %>
+      <% for (const issue of viewData.issues) { %>
+        <tr data-id="<%= issue.id %>">
           <td class="text-center text-primary"><input class="form-check-input" type="checkbox" id="doneCheck" disabled
-              <% if (task.done) { %> checked <% } %> /></td>
-          <td class="w-100 <% if (task.done) { %> text-muted <% } %>">
-            <%= task.description %>
+              <% if (issue.done) { %> checked <% } %> /></td>
+          <td class="w-100 <% if (issue.done) { %> text-muted <% } %>">
+            <%= issue.title %>
           </td>
           <td class="text-nowrap">
-            <a href="./tasks/<%= task.id %>/update">Update</a>
-            <a href="./tasks/<%= task.id %>/delete">Delete</a>
+            <a href="./issues/<%= issue.id %>/update">Update</a>
+            <a href="./issues/<%= issue.id %>/delete">Delete</a>
           </td>
         </tr>
       <% } %>
@@ -33,7 +33,7 @@
 </table>
 
 <%# Socket.IO: Template for the client. The same as above, sort of. %>
-<template id="task-template">
+<template id="issue-template">
   <tr>
     <td class="text-center text-primary">
       <input class="form-check-input" type="checkbox" disabled />

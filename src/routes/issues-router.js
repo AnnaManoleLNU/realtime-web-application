@@ -1,16 +1,16 @@
 /**
- * Tasks routes.
+ * Issues routes.
  *
  * @author Mats Loock
  * @version 2.0.0
  */
 
 import express from 'express'
-import { TasksController } from '../controllers/tasks-controller.js'
+import { IssuesController } from '../controllers/issues-controller.js'
 
 export const router = express.Router()
 
-const controller = new TasksController()
+const controller = new IssuesController()
 
 // Map HTTP verbs and route paths to controller action methods.
 
