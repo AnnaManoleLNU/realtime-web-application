@@ -7,6 +7,27 @@
 
 import mongoose from 'mongoose'
 
+/**
+ *
+ */
+// export class Issue {
+//   /**
+//    * Creates an instance of Issue.
+//    *
+//    * @param {string} title - The title of the issue.
+//    * @param {string} description - The description of the issue.
+//    * @param {string} image - The image of the issue.
+//    * @param {boolean} done - The status of the issue.
+//    *
+//    */
+//   constructor (title, description, image, done) {
+//     this.title = title
+//     this.description = description
+//     this.image = image
+//     this.done = done
+//   }
+// }
+
 // Create a schema.
 const schema = new mongoose.Schema({
   title: {

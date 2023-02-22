@@ -44,9 +44,11 @@ export class WebhooksController {
       let issue = null
       if (req.body.event_type === 'issue') {
         issue = new Issue({
-          // EDITED - MIGHT NOT WORK!!!!
+          // The attributes that are sent from GitLab are documented here:
+          // Not used yet.
           title: req.body.object_attributes.title,
-          description: req.body.object_attributes.description
+          description: req.body.object_attributes.description,
+          image: req.body.user.image
         })
         // log the request object when an issue is recieved from gitlab.
         console.log(req.body)
