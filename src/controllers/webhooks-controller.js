@@ -5,8 +5,6 @@
  * @version 2.0.0
  */
 
-import { Issue } from '../models/issue.js'
-
 /**
  * Encapsulates a controller.
  */
@@ -43,14 +41,13 @@ export class WebhooksController {
       // for events not supported.)
       let issue = null
       if (req.body.event_type === 'issue') {
-        issue = new Issue({
+        issue = {
           // The attributes that are sent from GitLab are documented here:
           // Not used yet.
           title: req.body.object_attributes.title,
           description: req.body.object_attributes.description
           // image: req.body.user.image
-        })
-        console.log('the image', issue.image)
+        }
         // log the request object when an issue is recieved from gitlab.
         console.log(req.body)
 
@@ -61,6 +58,7 @@ export class WebhooksController {
       res.status(200).end()
 
       // Put this last because socket communication can take long time.
+      // Listen to a webhook through a websocket. ?
       if (issue) {
         res.io.emit('issues', issue.toObject())
       }

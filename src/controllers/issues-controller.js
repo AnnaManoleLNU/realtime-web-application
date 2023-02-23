@@ -5,8 +5,6 @@
  * @version 2.0.0
  */
 
-import { Issue } from '../models/issue.js'
-
 /**
  * Encapsulates a controller.
  */
@@ -19,10 +17,28 @@ export class IssuesController {
    * @param {Function} next - Express next middleware function.
    */
   async index (req, res, next) {
+    // get from gitlab not from a database. Make request to api.
     try {
+      const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues?per_page=50`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
+        }
+      })
+      const json = await response.json()
+      console.log(json)
+      // Loop through json and take only the attributes we need: title, description, image. Store this is a new array.
+      const issues = []
+      for (const issue of json) {
+        issues.push({
+          title: issue.title,
+          description: issue.description,
+          image: issue.author.avatar_url
+        })
+      }
+      console.log(issues)
       const viewData = {
-        issues: (await Issue.find())
-          .map(issue => issue.toObject())
+        // json
       }
 
       res.render('issues/index', { viewData })
@@ -52,12 +68,13 @@ export class IssuesController {
   async viewIssue (req, res, next) {
     try {
       const id = req.params.id
-      const issue = await Issue.findOne({ _id: id })
-      console.log(issue)
-      if (!issue) {
-        return res.status(404).send('Issue not found')
-      }
-      res.render('issues/theissue', { viewData: issue })
+      const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${id}`, {
+        headers: {
+          Authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
+          'Content-Type': 'application/json'
+        }
+      })
+      console.log(response)
     } catch (error) {
       console.error(error)
     }
