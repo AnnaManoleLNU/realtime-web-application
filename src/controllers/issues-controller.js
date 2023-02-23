@@ -41,4 +41,25 @@ export class IssuesController {
     // Socket.IO: Send the created issue to all subscribers.
     res.io.emit('issues', req.body)
   }
+
+  /**
+   * View an issue in full page format.
+   *
+   * @param {*} req - The request object.
+   * @param {*} res - The response object.
+   * @param {*} next - Express next middleware function.
+   */
+  async viewIssue (req, res, next) {
+    try {
+      const id = req.params.id
+      const issue = await Issue.findOne({ _id: id })
+      console.log(issue)
+      if (!issue) {
+        return res.status(404).send('Issue not found')
+      }
+      res.render('issues/theissue', { viewData: issue })
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }

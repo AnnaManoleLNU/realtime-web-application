@@ -47,9 +47,10 @@ export class WebhooksController {
           // The attributes that are sent from GitLab are documented here:
           // Not used yet.
           title: req.body.object_attributes.title,
-          description: req.body.object_attributes.description,
-          image: req.body.user.image
+          description: req.body.object_attributes.description
+          // image: req.body.user.image
         })
+        console.log('the image', issue.image)
         // log the request object when an issue is recieved from gitlab.
         console.log(req.body)
 
@@ -61,7 +62,7 @@ export class WebhooksController {
 
       // Put this last because socket communication can take long time.
       if (issue) {
-        res.io.emit('issues/create', issue.toObject())
+        res.io.emit('issues', issue.toObject())
       }
     } catch (error) {
       const err = new Error('Internal Server Error')

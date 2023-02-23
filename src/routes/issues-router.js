@@ -16,3 +16,6 @@ const controller = new IssuesController()
 
 router.get('/', (req, res, next) => controller.index(req, res, next))
 router.get('/', (req, res) => controller.emit(req, res))
+
+// view a single issue full page format
+router.get('/:id', (req, res, next) => controller.viewIssue(req, res, next))

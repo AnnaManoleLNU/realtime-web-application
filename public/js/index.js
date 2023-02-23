@@ -8,7 +8,7 @@ if (issueTemplate) {
   const socket = window.io()
 
   // Listen for "issues/create" message from the server.
-  socket.on('issues/create', (issue) => insertIssueRow(issue))
+  socket.on('issues', (issue) => insertIssueRow(issue))
 }
 
 /**
@@ -43,8 +43,6 @@ function insertIssueRow (issue) {
 
     closeLink.href = `./issues/${issue.id}/close`
     viewLink.href = `./issues/${issue.id}/view`
-    console.log('the update link', closeLink)
-    console.log('the delete link', viewLink)
 
     issueList.appendChild(issueNode)
   }
