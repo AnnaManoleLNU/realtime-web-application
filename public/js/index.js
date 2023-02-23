@@ -26,23 +26,25 @@ function insertIssueRow (issue) {
 
     const issueRow = issueNode.querySelector('tr')
     const doneCheck = issueNode.querySelector('input[type=checkbox]')
-    const descriptionCell = issueNode.querySelector('td:nth-child(2)')
-    const [updateLink, deleteLink] = issueNode.querySelectorAll('a')
+    const titleCell = issueNode.querySelector('td:nth-child(2)')
+    const [closeLink, viewLink] = issueNode.querySelectorAll('a')
 
     issueRow.setAttribute('data-id', issue.id)
 
     if (issue.done) {
       doneCheck.setAttribute('checked', '')
-      descriptionCell.classList.add('text-muted')
+      titleCell.classList.add('text-muted')
     } else {
       doneCheck.removeAttribute('checked')
-      descriptionCell.classList.remove('text-muted')
+      titleCell.classList.remove('text-muted')
     }
 
-    descriptionCell.textContent = issue.description
+    titleCell.textContent = issue.title
 
-    updateLink.href = `./issues/${issue.id}/update`
-    deleteLink.href = `./issues/${issue.id}/delete`
+    closeLink.href = `./issues/${issue.id}/close`
+    viewLink.href = `./issues/${issue.id}/view`
+    console.log('the update link', closeLink)
+    console.log('the delete link', viewLink)
 
     issueList.appendChild(issueNode)
   }
