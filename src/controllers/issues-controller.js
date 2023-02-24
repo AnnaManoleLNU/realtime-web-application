@@ -1,14 +1,32 @@
 /**
  * Module for the IssuesController.
  *
- * @author Mats Loock
- * @version 2.0.0
+ * @author Anna Manole
+ * @version 1.0.0
  */
 
 /**
  * Encapsulates a controller.
  */
 export class IssuesController {
+  /**
+   * Fetches data from gitlab api.
+   *
+   * @param {*} url - The url to fetch data from.
+   * @returns {object} - The data from the url.
+   */
+  async fetchData (url) {
+    url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues?per_page=50`
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
+      }
+    })
+    const json = await response.json()
+    return json
+  }
+
   /**
    * Displays a list of issues.
    *
@@ -19,26 +37,23 @@ export class IssuesController {
   async index (req, res, next) {
     // get from gitlab not from a database. Make request to api.
     try {
-      const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues?per_page=50`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
-        }
-      })
-      const json = await response.json()
-      console.log(json)
+      const json = await this.fetchData()
+      // console.log(json)
       // Loop through json and take only the attributes we need: title, description, image. Store this is a new array.
       const issues = []
       for (const issue of json) {
         issues.push({
           title: issue.title,
           description: issue.description,
-          image: issue.author.avatar_url
+          image: issue.author.avatar_url,
+          id: issue.id,
+          iid: issue.iid
         })
       }
-      console.log(issues)
+      // console.log(issues)
       const viewData = {
-        // json
+        // populate viewData with issues array.
+        issues
       }
 
       res.render('issues/index', { viewData })
@@ -67,14 +82,20 @@ export class IssuesController {
    */
   async viewIssue (req, res, next) {
     try {
+      const json = await this.fetchData()
+      console.log(json)
+      // for the issue i want to see get the iid.
       const id = req.params.id
-      const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${id}`, {
-        headers: {
-          Authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
-          'Content-Type': 'application/json'
-        }
+      console.log(id)
+
+      const issue = []
+      issue.push({
+        title: json.title,
+        description: json.description,
+        id: json.id
       })
-      console.log(response)
+      // console.log(issue)
+      res.render('issues/theissue', issue)
     } catch (error) {
       console.error(error)
     }
