@@ -20,6 +20,7 @@ if (issueTemplate) {
 function insertIssueRow (issue) {
   const issueList = document.querySelector('#issue-list')
   console.log('from the client', issue)
+  console.log('the function from the client is working')
 
   // Only add a issue if it's not already in the list.
   if (!issueList.querySelector(`[data-id="${issue.id}"]`)) {

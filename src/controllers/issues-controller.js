@@ -80,16 +80,17 @@ export class IssuesController {
       const json = await this.fetchData()
 
       // look at the json array and find the issue that corresponds to the id.
-      const issue = json.find(issue => issue.id)
-      console.log('the issue', issue)
-
-      // create a viewData object from issue that only contains the attributes we need: title, description, image.
-      const viewData = {
-        title: issue.title,
-        description: issue.description,
-        image: issue.author.avatar_url
+      for (const issue of json) {
+        // use parseInt because the id is a number and the req.params.id is a string.
+        if (issue.id === parseInt(req.params.id)) {
+          const viewData = {
+            title: issue.title,
+            description: issue.description,
+            image: issue.author.avatar_url
+          }
+          res.render('issues/theissue', { viewData })
+        }
       }
-      res.render('issues/theissue', { viewData })
     } catch (error) {
       console.error(error)
     }
