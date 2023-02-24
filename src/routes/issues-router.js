@@ -19,3 +19,6 @@ router.get('/', (req, res) => controller.emit(req, res))
 
 // view a single issue full page format
 router.get('/:id', (req, res, next) => controller.viewIssue(req, res, next))
+
+// close an issue.
+router.put('/:id/close', (req, res, next) => controller.closeIssue(req, res, next))

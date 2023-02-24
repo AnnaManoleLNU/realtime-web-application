@@ -42,16 +42,12 @@ export class WebhooksController {
       let issue = null
       if (req.body.event_type === 'issue') {
         issue = {
-          // The attributes that are sent from GitLab are documented here:
-          // Not used yet.
           title: req.body.object_attributes.title,
           description: req.body.object_attributes.description
           // image: req.body.user.image
         }
         // log the request object when an issue is recieved from gitlab.
         console.log(req.body)
-
-        await issue.save()
       }
 
       // It is important to respond quickly!
@@ -60,7 +56,7 @@ export class WebhooksController {
       // Put this last because socket communication can take long time.
       // Listen to a webhook through a websocket. ?
       if (issue) {
-        res.io.emit('issues', issue.toObject())
+        res.io.emit('issues', { issue })
       }
     } catch (error) {
       const err = new Error('Internal Server Error')

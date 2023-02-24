@@ -17,8 +17,10 @@
             <%= issue.title %>
           </td>
           <td class="text-nowrap">
-            <!-- TO DO: fix the links "./issues/<%= issue.id %>/close"  etc ...-->
-            <a href="./issues">Close</a>
+            <!-- Create a form that closes an issue -->
+            <form class="row g-3" method="post" action="./issues/<%= issue.id %>/close">
+              <button type="submit" class="btn btn-danger">Close</button>
+            </form>
             <a href="./issues/<%= issue.id %>">View</a>
           </td>
         </tr>

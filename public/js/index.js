@@ -1,5 +1,6 @@
 import '../socket.io/socket.io.js'
 
+console.log('hello from the client')
 const issueTemplate = document.querySelector('#issue-template')
 
 // If issueTemplate is not present on the page, just ignore and do not listen for issue messages.
@@ -18,7 +19,7 @@ if (issueTemplate) {
  */
 function insertIssueRow (issue) {
   const issueList = document.querySelector('#issue-list')
-  console.log(issue)
+  console.log('from the client', issue)
 
   // Only add a issue if it's not already in the list.
   if (!issueList.querySelector(`[data-id="${issue.id}"]`)) {
