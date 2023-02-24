@@ -88,14 +88,18 @@ export class IssuesController {
       const id = req.params.id
       console.log(id)
 
-      const issue = []
-      issue.push({
-        title: json.title,
-        description: json.description,
-        id: json.id
-      })
-      // console.log(issue)
-      res.render('issues/theissue', issue)
+      // look at the json array and find the issue that corresponds to the id.
+      const issue = json.find(issue => issue.id)
+      console.log('the issue', issue)
+
+      // create a viewData object from issue that only contains the attributes we need: title, description, image.
+      const viewData = {
+        title: issue.title,
+        description: issue.description,
+        image: issue.author.avatar_url
+      }
+      console.log(viewData)
+      res.render('issues/theissue', { viewData })
     } catch (error) {
       console.error(error)
     }
