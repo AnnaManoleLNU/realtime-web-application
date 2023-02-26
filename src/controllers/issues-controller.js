@@ -46,6 +46,7 @@ export class IssuesController {
           id: issue.id
         })
       }
+      console.log(json)
       const viewData = {
         // populate viewData with issues array.
         issues
@@ -87,6 +88,8 @@ export class IssuesController {
             title: issue.title,
             description: issue.description,
             image: issue.author.avatar_url
+
+            // ny kod här
           }
           res.render('issues/theissue', { viewData })
         }
@@ -104,15 +107,33 @@ export class IssuesController {
    * @param {*} next - Express next middleware function.
    */
   async closeIssue (req, res, next) {
-    const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/64/?state_event=close`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
+    // write a method that closes an issue.
+    // get the json data from fetchData method.
+    try {
+      console.log('close issue')
+      const json = await this.fetchData()
+      // find the issue that corresponds to the id you are trying to close from the json array.
+      for (const issue of json) {
+        // use parseInt because the id is a number and the req.params.id is a string.
+        // console.log(issue)
+        if (issue.id === parseInt(req.params.id)) {
+          // close the issue.
+          issue.state = 'closed'
+          console.log(issue.state)
+          // send the data to gitlab api.
+          // this does not work. the issue stays open.
+          const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.id}`, {
+            method: 'PUT',
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
+          })
+          console.log(response)
+        }
       }
-    })
-    const json = await response.json()
-    // create an method that closes an issue.
-    const issue = json.find(issue => issue.id)
-    console.log('the issue', issue)
+      // redirect to the issues page if the issue is closed.
+      res.redirect('/issues')
+    } catch (error) {
+      console.error(error)
+    }
   }
 }

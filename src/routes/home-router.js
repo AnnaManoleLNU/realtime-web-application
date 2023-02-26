@@ -1,8 +1,8 @@
 /**
  * Home routes.
  *
- * @author Mats Loock
- * @version 2.0.0
+ * @author Anna Manole
+ * @version 1.0.0
  */
 
 import express from 'express'
