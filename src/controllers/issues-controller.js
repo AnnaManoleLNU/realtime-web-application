@@ -111,7 +111,6 @@ export class IssuesController {
             state: issue.state
           }
           res.render('issues/update', { viewData })
-          console.log(viewData)
         }
       }
     } catch (error) {
@@ -134,7 +133,7 @@ export class IssuesController {
       for (const issue of json) {
         // use parseInt because the id is a number and the req.params.id is a string.
         // also if the input checkbox is checked.
-        if (issue.id === parseInt(req.params.id) && req.body.done === 'on') {
+        if (issue.id === parseInt(req.params.id)) {
           // send the data to gitlab api.
           const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
           await fetch(url, {
@@ -170,11 +169,10 @@ export class IssuesController {
   async openIssue (req, res, next) {
     try {
       console.log('issue opened')
-      console.log(req.body)
       const json = await this.fetchData()
       for (const issue of json) {
         // also if the input checkbox is not checked.
-        if (issue.id === parseInt(req.params.id) && req.body.done !== 'on') {
+        if (issue.id === parseInt(req.params.id)) {
           // send the data to gitlab api.
           const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
           await fetch(url, {
@@ -189,7 +187,7 @@ export class IssuesController {
             })
           })
           // Socket.IO: Send the created issue to all subscribers.
-          res.io.emit('issues/index', issue)
+          // res.io.emit('issues', issue)
         }
       }
       // redirect to the issues page when the issue is re-opened.

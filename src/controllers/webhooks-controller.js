@@ -47,17 +47,10 @@ export class WebhooksController {
           id: req.body.object_attributes.id,
           state: req.body.object_attributes.state,
           action: req.body.object_attributes.action
-          // image: req.body.user.image
         }
         // log the request object when an issue is recieved from gitlab.
         console.log('the req body', req.body)
         console.log('the issue', issue)
-      }
-
-      // a log to see if the issue is closed.
-      if (issue.state === 'closed') {
-        // update the issue on the application.
-        console.log('the issue is closed')
       }
 
       // It is important to respond quickly!
@@ -67,6 +60,39 @@ export class WebhooksController {
       if (issue) {
         res.io.emit('issues', { issue })
         console.log('the issue is emitted')
+      }
+    } catch (error) {
+      const err = new Error('Internal Server Error')
+      err.status = 500
+      next(err)
+    }
+  }
+
+  async indexUpdate (req, res, next) {
+    try {
+      // Only interested in issues events. (But still, respond with a 200
+      // for events not supported.)
+      let issue = null
+      if (req.body.event_type === 'issue') {
+        issue = {
+          title: req.body.object_attributes.title,
+          description: req.body.object_attributes.description,
+          id: req.body.object_attributes.id,
+          state: req.body.object_attributes.state,
+          action: req.body.object_attributes.action
+        }
+        // log the request object when an issue is recieved from gitlab.
+        console.log('the req body', req.body)
+        console.log('the issue', issue)
+      }
+
+      // It is important to respond quickly!
+      res.status(200).end()
+
+      // Put this last because socket communication can take long time.
+      if (issue) {
+        res.io.emit('update', { issue })
+        console.log('POSTY UPDATE')
       }
     } catch (error) {
       const err = new Error('Internal Server Error')
