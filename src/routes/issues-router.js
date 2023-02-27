@@ -22,6 +22,9 @@ router.get('/:id', (req, res, next) => controller.getViewPage(req, res, next))
 // Get the update page.
 router.get('/:id/update', (req, res, next) => controller.getUpdatePage(req, res, next))
 
+// Update an issue.
+router.post('/:id/update', (req, res, next) => controller.updateIssue(req, res, next))
+
 // Close an issue.
 router.post('/:id/update/close', (req, res, next) => controller.closeIssue(req, res, next))
 

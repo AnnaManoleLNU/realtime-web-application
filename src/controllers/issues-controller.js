@@ -197,4 +197,43 @@ export class IssuesController {
       console.error(error)
     }
   }
+
+  /**
+   * A method that edits an issue.
+   *
+   * @param {*} req - The express request object.
+   * @param {*} res - The express response object.
+   * @param {*} next - Express next middleware function.
+   */
+  async updateIssue (req, res, next) {
+    try {
+      console.log('update issue')
+      const json = await this.fetchData()
+      for (const issue of json) {
+        if (issue.id === parseInt(req.params.id)) {
+          // send the data to gitlab api.
+          const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
+          await fetch(url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
+              'X-Gitlab-Event': 'Issue Hook'
+            },
+            body: JSON.stringify({
+              title: req.body.title,
+              description: req.body.description
+            })
+          })
+          // Socket.IO: Send the created issue to all subscribers.
+          // Emit when you close an issue.
+          res.io.emit('issues/index', issue)
+        }
+      }
+      // redirect to the issues page when the issue is re-opened.
+      res.redirect('/issues')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }
