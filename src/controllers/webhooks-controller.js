@@ -43,18 +43,26 @@ export class WebhooksController {
       if (req.body.event_type === 'issue') {
         issue = {
           title: req.body.object_attributes.title,
-          description: req.body.object_attributes.description
-          // image: req.body.user.image
+          description: req.body.object_attributes.description,
+          id: req.body.object_attributes.id,
+          state: req.body.object_attributes.state,
+          action: req.body.object_attributes.action
         }
         // log the request object when an issue is recieved from gitlab.
-        console.log(req.body)
+        console.log('the req body', req.body)
+        console.log('the issue', issue)
+      }
+
+      // a log to see if the issue is closed.
+      if (issue.state === 'closed') {
+        // update the issue on the application.
+        console.log('the issue is closed')
       }
 
       // It is important to respond quickly!
       res.status(200).end()
 
       // Put this last because socket communication can take long time.
-      // Listen to a webhook through a websocket. ?
       if (issue) {
         res.io.emit('issues', { issue })
       }

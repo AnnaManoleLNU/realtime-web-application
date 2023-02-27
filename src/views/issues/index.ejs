@@ -12,13 +12,11 @@
       <% for (const issue of viewData.issues) { %>
         <tr data-id="<%= issue.id %>">
           <td class="text-center text-primary"><input class="form-check-input" type="checkbox" id="doneCheck" disabled
-              <% if (issue.done) { %> checked <% } %> /></td>
-          <td class="w-100 <% if (issue.done) { %> text-muted <% } %>">
+              <% if (issue.state === 'closed') { %> checked <% } %> /></td>
+          <td class="w-100 <% if (issue.state === 'closed') { %> text-muted <% } %>">
             <%= issue.title %>
           </td>
           <td class="text-nowrap">
-            <!-- Create a form that closes an issue -->
-            <!-- Why does this not work -->
             <form method="post" action="./issues/<%= issue.id %>/close">
               <a href="./issues/<%= issue.id %>/update">Update</a>
             </form>

@@ -43,7 +43,8 @@ export class IssuesController {
       for (const issue of json) {
         issues.push({
           title: issue.title,
-          id: issue.id
+          id: issue.id,
+          state: issue.state
         })
       }
       // console.log(json)
@@ -119,6 +120,7 @@ export class IssuesController {
             id: issue.id
           }
           res.render('issues/update', { viewData })
+          console.log(viewData)
         }
       }
     } catch (error) {
