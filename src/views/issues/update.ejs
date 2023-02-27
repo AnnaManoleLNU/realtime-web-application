@@ -3,18 +3,38 @@
 <p><%= viewData.description %></p>
 <img src="<%= viewData.image %>" alt="User avatar">
 
-<form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/update">
-  <div class="col-12">
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="doneCheck" name="done" 
-        <% if (viewData?.state === 'closed') { %> checked <% } %> />
-        <label class="form-check-label" for="doneCheck">
-          Mark issue as closed
-        </label>
-        
+<!-- If it's open, run the close method -->
+<% if (viewData?.state === 'opened') { %>
+  <form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/update/close">
+    <div class="col-12">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="doneCheck" name="done">
+          <label class="form-check-label" for="doneCheck">
+            Mark issue as closed
+          </label>
+          
+      </div>
     </div>
-  </div>
-  <div class="col-12">
-    <button type="submit" class="btn btn-primary">Update</button>
-  </div>
-</form>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </form>
+<% } %>
+
+<!-- If it's closed, run the open method -->
+<% if (viewData?.state === 'closed') { %>
+  <form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/update/open">
+    <div class="col-12">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="doneCheck" name="done" checked>
+          <label class="form-check-label" for="doneCheck">
+            Mark issue as closed
+          </label>
+          
+      </div>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </form>
+<% } %>

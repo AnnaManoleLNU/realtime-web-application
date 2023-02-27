@@ -154,7 +154,7 @@ export class IssuesController {
       }
 
       // redirect to the issues page if the issue is closed.
-      res.redirect('../')
+      res.redirect('/issues')
     } catch (error) {
       console.error(error)
     }
@@ -192,7 +192,7 @@ export class IssuesController {
         }
       }
       // redirect to the issues page when the issue is re-opened.
-      res.redirect('../')
+      res.redirect('/issues')
     } catch (error) {
       console.error(error)
     }

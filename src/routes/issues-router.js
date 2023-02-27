@@ -23,7 +23,7 @@ router.get('/:id', (req, res, next) => controller.getViewPage(req, res, next))
 router.get('/:id/update', (req, res, next) => controller.getUpdatePage(req, res, next))
 
 // Close an issue.
-router.post('/:id/update', (req, res, next) => controller.closeIssue(req, res, next))
+router.post('/:id/update/close', (req, res, next) => controller.closeIssue(req, res, next))
 
 // Reopen an issue.
-router.post('/:id/update', (req, res, next) => controller.openIssue(req, res, next))
+router.post('/:id/update/open', (req, res, next) => controller.openIssue(req, res, next))
