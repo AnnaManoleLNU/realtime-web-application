@@ -37,7 +37,8 @@ function insertIssueRow (issue) {
     updateLink.href = `./issues/${issue.issue.id}/update`
     viewLink.href = `./issues/${issue.issue.id}`
 
-    issueList.appendChild(issueNode)
+    // the child should be first.
+    issueList.prepend(issueNode)
   }
 }
 
@@ -48,7 +49,6 @@ function insertIssueRow (issue) {
  */
 function updateIssue (issue) {
   const issueRow = document.querySelector(`[data-id="${issue.issue.id}"]`)
-  console.log(issueRow)
   const doneCheck = issueRow.querySelector('input[type=checkbox]')
   const titleCell = issueRow.querySelector('td:nth-child(2)')
 

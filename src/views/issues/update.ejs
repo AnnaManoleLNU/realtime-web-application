@@ -1,8 +1,8 @@
 <h1>Update issue</h1>
 <br>
-<!-- <h3>Title: <%= viewData.title %></h3>
-<p>Description: <%= viewData.description %></p> -->
 <img src="<%= viewData.image %>" alt="User avatar">
+<br>
+<br>
 
 <!-- Create a form for editing the title and description -->
 <form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/update">
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="col-12">
-      <button type="submit" class="btn btn-primary" id="close-button">Update</button>
+      <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </form>
 <% } %>
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="col-12">
-      <button type="submit" class="btn btn-primary" id="close-button">Update</button>
+      <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </form>
 <% } %>
