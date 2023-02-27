@@ -1,5 +1,4 @@
 const issueTemplate = document.querySelector('#issue-template')
-const myButton = document.querySelector('#my-button')
 
 // If issueTemplate is not present on the page, just ignore and do not listen for issue messages.
 if (issueTemplate) {
@@ -11,22 +10,6 @@ if (issueTemplate) {
   socket.on('issues', (issue) => {
     insertIssueRow(issue)
     updateIssue(issue)
-    updateIssueButton(issue)
-  })
-
-  socket.on('update', (issue) => {
-    updateIssueButton(issue)
-  })
-}
-
-if (myButton) {
-  await import('../socket.io/socket.io.js')
-  // Create a socket connection using Socket.IO.
-  const socket = window.io()
-  console.log('we have a button')
-
-  socket.on('update', (issue) => {
-    updateIssueButton(issue)
   })
 }
 
@@ -79,22 +62,5 @@ function updateIssue (issue) {
   }
   if (issue.issue.action === 'update') {
     titleCell.textContent = issue.issue.title
-  }
-}
-
-/**
- * A function that updates the issue button.
- *
- * @param {object} issue - The issue to update.
- */
-function updateIssueButton (issue) {
-  console.log(issue)
-  const issueButton = document.querySelector('#my-button')
-  console.log(issueButton)
-
-  if (issue.issue.state === 'closed') {
-    issueButton.textContent = 'Reopen'
-  } else {
-    issueButton.textContent = 'Close'
   }
 }

@@ -17,9 +17,3 @@ router.post('/',
   (req, res, next) => webhooksController.authenticate(req, res, next),
   (req, res, next) => webhooksController.indexPost(req, res, next)
 )
-
-// Webhook for updating page.
-router.post('/update',
-  (req, res, next) => webhooksController.authenticate(req, res, next),
-  (req, res, next) => webhooksController.indexUpdate(req, res, next)
-)
