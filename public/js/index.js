@@ -17,7 +17,7 @@ if (issueTemplate) {
  */
 function insertIssueRow (issue) {
   const issueList = document.querySelector('#issue-list')
-  console.log('from the client', issue)
+  console.log('issue from GitLab', issue)
   console.log('the function from the client is working')
 
   // Only add a issue if it's not already in the list.
@@ -27,9 +27,9 @@ function insertIssueRow (issue) {
     const issueRow = issueNode.querySelector('tr')
     const doneCheck = issueNode.querySelector('input[type=checkbox]')
     const titleCell = issueNode.querySelector('td:nth-child(2)')
-    const [closeLink, viewLink] = issueNode.querySelectorAll('a')
+    const [updateLink, viewLink] = issueNode.querySelectorAll('a')
 
-    issueRow.setAttribute('data-id', issue.id)
+    issueRow.setAttribute('data-id', issue.issue.id)
 
     if (issue.done) {
       doneCheck.setAttribute('checked', '')
@@ -39,10 +39,16 @@ function insertIssueRow (issue) {
       titleCell.classList.remove('text-muted')
     }
 
-    titleCell.textContent = issue.title
+    titleCell.textContent = issue.issue.title
 
-    closeLink.href = `./issues/${issue.id}/close`
-    viewLink.href = `./issues/${issue.id}/view`
+    console.log(issue.issue.title)
+    console.log(issue.issue.id)
+
+    updateLink.href = `./issues/${issue.issue.id}/update`
+    viewLink.href = `./issues/${issue.issue.id}`
+
+    console.log(updateLink)
+    console.log(viewLink)
 
     issueList.appendChild(issueNode)
   }

@@ -17,9 +17,7 @@
             <%= issue.title %>
           </td>
           <td class="text-nowrap">
-            <form method="post" action="./issues/<%= issue.id %>/close">
               <a href="./issues/<%= issue.id %>/update">Update</a>
-            </form>
             <a href="./issues/<%= issue.id %>">View</a>
           </td>
         </tr>
@@ -42,7 +40,7 @@
     </td>
     <td class="w-100"></td>
     <td class="text-nowrap">
-      <a>Close</a>
+      <a>Update</a>
       <a>View</a>
     </td>
   </tr>
