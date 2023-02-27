@@ -15,7 +15,6 @@ const controller = new IssuesController()
 // Map HTTP verbs and route paths to controller action methods.
 
 router.get('/', (req, res, next) => controller.index(req, res, next))
-router.get('/', (req, res) => controller.emit(req, res))
 
 //  View a single issue full page format.
 router.get('/:id', (req, res, next) => controller.getViewPage(req, res, next))

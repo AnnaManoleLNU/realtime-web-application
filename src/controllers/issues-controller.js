@@ -60,17 +60,6 @@ export class IssuesController {
   }
 
   /**
-   * Emits a new issue to all subscribers.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   */
-  async emit (req, res) {
-    // Socket.IO: Send the created issue to all subscribers.
-    res.io.emit('issues', req.body)
-  }
-
-  /**
    * View an issue in full page format.
    *
    * @param {*} req - The request object.
@@ -117,7 +106,9 @@ export class IssuesController {
             title: issue.title,
             description: issue.description,
             image: issue.author.avatar_url,
-            id: issue.id
+            id: issue.id,
+            iid: issue.iid,
+            state: issue.state
           }
           res.render('issues/update', { viewData })
           console.log(viewData)
@@ -145,22 +136,31 @@ export class IssuesController {
       // find the issue that corresponds to the id you are trying to close from the json array.
       for (const issue of json) {
         // use parseInt because the id is a number and the req.params.id is a string.
-        // console.log(issue)
         if (issue.id === parseInt(req.params.id)) {
           // close the issue.
-          issue.state = 'closed'
           // send the data to gitlab api.
-          // this does not work. the issue stays open.
-          const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.id}`, {
+          const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
+          await fetch(url, {
             method: 'PUT',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + process.env.ACCESS_TOKEN
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
+              'X-Gitlab-Event': 'Issue Hook'
+            },
+            body: JSON.stringify({
+              state_event: 'close'
+            })
           })
-          console.log(response)
+          // Socket.IO: Send the created issue to all subscribers.
+          // Emit when you close an issue.
+          res.io.emit('issues/index', issue)
         }
       }
+      // Socket.IO: Send the created issue to all subscribers.
+      // Emit when you close an issue.
+
       // redirect to the issues page if the issue is closed.
-      res.redirect('../issues')
+      res.redirect('../')
     } catch (error) {
       console.error(error)
     }
