@@ -9,7 +9,7 @@ if (issueTemplate) {
   // Listen for "issues" message from the server.
   socket.on('issues', (issue) => {
     insertIssueRow(issue)
-    updateStatus(issue)
+    updateIssue(issue)
   })
 }
 
@@ -21,7 +21,6 @@ if (issueTemplate) {
 function insertIssueRow (issue) {
   const issueList = document.querySelector('#issue-list')
   console.log('issue from GitLab', issue)
-  console.log('the function from the client is working')
 
   // Only add a issue if it's not already in the list.
   if (!issueList.querySelector(`[data-id="${issue.issue.id}"]`)) {
@@ -43,11 +42,11 @@ function insertIssueRow (issue) {
 }
 
 /**
- * Updates the status of an issue.
+ * Updates the status and title of an issue.
  *
  * @param {object} issue - The issue to update.
  */
-function updateStatus (issue) {
+function updateIssue (issue) {
   const issueRow = document.querySelector(`[data-id="${issue.issue.id}"]`)
   console.log(issueRow)
   const doneCheck = issueRow.querySelector('input[type=checkbox]')
@@ -56,8 +55,12 @@ function updateStatus (issue) {
   if (issue.issue.action === 'close') {
     doneCheck.setAttribute('checked', '')
     titleCell.classList.add('text-muted')
-  } else {
+  }
+  if (issue.issue.action === 'reopen') {
     doneCheck.removeAttribute('checked')
     titleCell.classList.remove('text-muted')
+  }
+  if (issue.issue.action === 'update') {
+    titleCell.textContent = issue.issue.title
   }
 }
