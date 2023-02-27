@@ -1,0 +1,19 @@
+<h1>Update issue</h1>
+<h3><%= viewData.title %></h3>
+<p><%= viewData.description %></p>
+<img src="<%= viewData.image %>" alt="User avatar">
+
+<form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/update">
+  <div class="col-12">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="doneCheck" name="done" 
+        <% if (viewData?.done) { %> checked <% } %> />
+        <label class="form-check-label" for="doneCheck">
+          Close issue
+        </label>
+    </div>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Update</button>
+  </div>
+</form>

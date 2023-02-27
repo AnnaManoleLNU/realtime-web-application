@@ -2,7 +2,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Done</th>
+      <th>Closed</th>
       <th>Title</th>
       <th>Action</th>
     </tr>
@@ -20,7 +20,7 @@
             <!-- Create a form that closes an issue -->
             <!-- Why does this not work -->
             <form method="post" action="./issues/<%= issue.id %>/close">
-              <button type="submit" class="btn btn-danger">Close</button>
+              <a href="./issues/<%= issue.id %>/update">Update</a>
             </form>
             <a href="./issues/<%= issue.id %>">View</a>
           </td>

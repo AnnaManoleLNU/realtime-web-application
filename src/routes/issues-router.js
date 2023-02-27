@@ -17,8 +17,11 @@ const controller = new IssuesController()
 router.get('/', (req, res, next) => controller.index(req, res, next))
 router.get('/', (req, res) => controller.emit(req, res))
 
-// view a single issue full page format
-router.get('/:id', (req, res, next) => controller.viewIssue(req, res, next))
+//  View a single issue full page format.
+router.get('/:id', (req, res, next) => controller.getViewPage(req, res, next))
 
-// close an issue.
+// Get the update page.
+router.get('/:id/update', (req, res, next) => controller.getUpdatePage(req, res, next))
+
+// Close an issue.
 router.post('/:id/close', (req, res, next) => controller.closeIssue(req, res, next))

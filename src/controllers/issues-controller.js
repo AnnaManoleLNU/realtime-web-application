@@ -46,7 +46,7 @@ export class IssuesController {
           id: issue.id
         })
       }
-      console.log(json)
+      // console.log(json)
       const viewData = {
         // populate viewData with issues array.
         issues
@@ -76,7 +76,7 @@ export class IssuesController {
    * @param {*} res - The response object.
    * @param {*} next - Express next middleware function.
    */
-  async viewIssue (req, res, next) {
+  async getViewPage (req, res, next) {
     try {
       const json = await this.fetchData()
 
@@ -88,10 +88,37 @@ export class IssuesController {
             title: issue.title,
             description: issue.description,
             image: issue.author.avatar_url
-
-            // ny kod här
           }
           res.render('issues/theissue', { viewData })
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  /**
+   * View an issue in full page format.
+   *
+   * @param {*} req - The request object.
+   * @param {*} res - The response object.
+   * @param {*} next - Express next middleware function.
+   */
+  async getUpdatePage (req, res, next) {
+    try {
+      const json = await this.fetchData()
+
+      // look at the json array and find the issue that corresponds to the id.
+      for (const issue of json) {
+        // use parseInt because the id is a number and the req.params.id is a string.
+        if (issue.id === parseInt(req.params.id)) {
+          const viewData = {
+            title: issue.title,
+            description: issue.description,
+            image: issue.author.avatar_url,
+            id: issue.id
+          }
+          res.render('issues/update', { viewData })
         }
       }
     } catch (error) {
@@ -112,6 +139,7 @@ export class IssuesController {
     try {
       console.log('close issue')
       const json = await this.fetchData()
+      console.log(json)
       // find the issue that corresponds to the id you are trying to close from the json array.
       for (const issue of json) {
         // use parseInt because the id is a number and the req.params.id is a string.
@@ -119,7 +147,6 @@ export class IssuesController {
         if (issue.id === parseInt(req.params.id)) {
           // close the issue.
           issue.state = 'closed'
-          console.log(issue.state)
           // send the data to gitlab api.
           // this does not work. the issue stays open.
           const response = await fetch(`https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.id}`, {
@@ -131,7 +158,7 @@ export class IssuesController {
         }
       }
       // redirect to the issues page if the issue is closed.
-      res.redirect('/issues')
+      res.redirect('../issues')
     } catch (error) {
       console.error(error)
     }

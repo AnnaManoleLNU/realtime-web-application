@@ -1,10 +1,8 @@
-import '../socket.io/socket.io.js'
-
-console.log('hello from the client')
 const issueTemplate = document.querySelector('#issue-template')
 
 // If issueTemplate is not present on the page, just ignore and do not listen for issue messages.
 if (issueTemplate) {
+  await import('../socket.io/socket.io.js')
   // Create a socket connection using Socket.IO.
   const socket = window.io()
 
