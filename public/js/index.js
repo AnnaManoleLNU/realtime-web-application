@@ -1,13 +1,18 @@
 const issueTemplate = document.querySelector('#issue-template')
 
+// The base URL.
+const baseURL = document.querySelector('base').getAttribute('href')
+
 // If issueTemplate is not present on the page, just ignore and do not listen for issue messages.
 if (issueTemplate) {
   await import('../socket.io/socket.io.js')
   // Create a socket connection using Socket.IO.
-  const socket = window.io()
+  const socket = window.io({ path: `${baseURL}socket.io` })
+  console.log('issueTemplate exists, hello!!!')
 
   // Listen for "issues" message from the server.
   socket.on('issues', (issue) => {
+    console.log('socket is on issues')
     insertIssueRow(issue)
     updateIssue(issue)
   })

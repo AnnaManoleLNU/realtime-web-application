@@ -144,7 +144,7 @@ export class IssuesController {
             })
           })
           // Socket.IO: Send the created issue to all subscribers.
-          res.io.emit('issues/index', issue)
+          res.io.emit('issues', issue)
         }
       }
 
