@@ -124,15 +124,15 @@ export class IssuesController {
    * @param {*} req - The express request object.
    * @param {*} res - The express response object.
    * @param {*} next - Express next middleware function.
+   * @param {string} status - The status of the issue.
    */
-  async closeIssue (req, res, next) {
+  async changeStatus (req, res, next, status) {
     try {
       console.log('close issue')
       const json = await this.fetchData()
       // find the issue that corresponds to the id you are trying to close from the json array.
       for (const issue of json) {
         // use parseInt because the id is a number and the req.params.id is a string.
-        // also if the input checkbox is checked.
         if (issue.id === parseInt(req.params.id)) {
           // send the data to gitlab api.
           const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
@@ -144,7 +144,7 @@ export class IssuesController {
               'X-Gitlab-Event': 'Issue Hook'
             },
             body: JSON.stringify({
-              state_event: 'close'
+              state_event: status
             })
           })
           // Socket.IO: Send the created issue to all subscribers.
@@ -165,36 +165,22 @@ export class IssuesController {
    * @param {*} req - The express request object.
    * @param {*} res - The express response object.
    * @param {*} next - Express next middleware function.
+   *
    */
   async openIssue (req, res, next) {
-    try {
-      console.log('issue opened')
-      const json = await this.fetchData()
-      for (const issue of json) {
-        // also if the input checkbox is not checked.
-        if (issue.id === parseInt(req.params.id)) {
-          // send the data to gitlab api.
-          const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
-          await fetch(url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
-              'X-Gitlab-Event': 'Issue Hook'
-            },
-            body: JSON.stringify({
-              state_event: 'reopen'
-            })
-          })
-          // Socket.IO: Send the created issue to all subscribers.
-          // res.io.emit('issues', issue)
-        }
-      }
-      // redirect to the issues page when the issue is re-opened.
-      res.redirect('..')
-    } catch (error) {
-      console.error(error)
-    }
+    await this.changeStatus(req, res, next, 'reopen')
+  }
+
+  /**
+   * A method that closes an issue.
+   *
+   * @param {*} req - The express request object.
+   * @param {*} res - The express response object.
+   * @param {*} next - Express next middleware function.
+   *
+   */
+  async closeIssue (req, res, next) {
+    await this.changeStatus(req, res, next, 'close')
   }
 
   /**
