@@ -15,6 +15,7 @@ import { router } from './routes/router.js'
 
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
+import helmet from 'helmet'
 
 try {
   // Creates an Express application.
@@ -41,6 +42,21 @@ try {
 
   // Set up a morgan logger using the dev format for log entries.
   app.use(logger('dev'))
+
+  // // Use helmet.
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: false,
+      contentSecurityPolicy: {
+        directives: {
+          imgSrc: ["'self'", 'data:', 'gitlab.lnu.se'],
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", 'https://cdn.jsdelivr.net'],
+          styleSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://fonts.googleapis.com/']
+        }
+      }
+    })
+  )
 
   // View engine setup.
   app.set('view engine', 'ejs')
