@@ -8,11 +8,9 @@ if (issueTemplate) {
   await import('../socket.io/socket.io.js')
   // Create a socket connection using Socket.IO.
   const socket = window.io({ path: `${baseURL}socket.io` })
-  console.log('issueTemplate exists, hello!!!')
 
   // Listen for "issues" message from the server.
   socket.on('issues', (issue) => {
-    console.log('socket is on issues')
     insertIssueRow(issue)
     updateIssue(issue)
   })

@@ -52,6 +52,7 @@ export class IssuesController {
         issues
       }
       res.render('issues/index', { viewData })
+      next()
     } catch (error) {
       next(error)
     }
@@ -80,8 +81,9 @@ export class IssuesController {
           res.render('issues/theissue', { viewData })
         }
       }
+      next()
     } catch (error) {
-      console.error(error)
+      next(error)
     }
   }
 
@@ -110,8 +112,9 @@ export class IssuesController {
           res.render('issues/update', { viewData })
         }
       }
+      next()
     } catch (error) {
-      console.error(error)
+      next(error)
     }
   }
 
