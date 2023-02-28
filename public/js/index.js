@@ -20,7 +20,6 @@ if (issueTemplate) {
  */
 function insertIssueRow (issue) {
   const issueList = document.querySelector('#issue-list')
-  console.log('issue from GitLab', issue)
 
   // Only add a issue if it's not already in the list.
   if (!issueList.querySelector(`[data-id="${issue.issue.id}"]`)) {

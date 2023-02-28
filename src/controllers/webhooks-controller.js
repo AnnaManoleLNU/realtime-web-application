@@ -48,9 +48,6 @@ export class WebhooksController {
           state: req.body.object_attributes.state,
           action: req.body.object_attributes.action
         }
-        // log the request object when an issue is recieved from gitlab.
-        console.log('the req body', req.body)
-        console.log('the issue', issue)
       }
 
       // It is important to respond quickly!
@@ -59,7 +56,6 @@ export class WebhooksController {
       // Put this last because socket communication can take long time.
       if (issue) {
         res.io.emit('issues', { issue })
-        console.log('the issue is emitted')
       }
     } catch (error) {
       const err = new Error('Internal Server Error')

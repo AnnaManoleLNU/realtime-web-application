@@ -38,7 +38,7 @@ export class IssuesController {
     // get from gitlab not from a database. Make request to api.
     try {
       const json = await this.fetchData()
-      // Loop through json and take only the attributes we need: title, description, image. Store this is a new array.
+      // Loop through json and take only the attributes we need: title, description, image. Store this in a new array.
       const issues = []
       for (const issue of json) {
         issues.push({
@@ -47,12 +47,10 @@ export class IssuesController {
           state: issue.state
         })
       }
-      // console.log(json)
       const viewData = {
         // populate viewData with issues array.
         issues
       }
-
       res.render('issues/index', { viewData })
     } catch (error) {
       next(error)
@@ -107,7 +105,6 @@ export class IssuesController {
             description: issue.description,
             image: issue.author.avatar_url,
             id: issue.id,
-            iid: issue.iid,
             state: issue.state
           }
           res.render('issues/update', { viewData })
@@ -119,7 +116,7 @@ export class IssuesController {
   }
 
   /**
-   * A method that closes an issue.
+   * A helped method that changes the status of an issue.
    *
    * @param {*} req - The express request object.
    * @param {*} res - The express response object.
@@ -128,13 +125,12 @@ export class IssuesController {
    */
   async changeStatus (req, res, next, status) {
     try {
-      console.log('close issue')
       const json = await this.fetchData()
       // find the issue that corresponds to the id you are trying to close from the json array.
       for (const issue of json) {
         // use parseInt because the id is a number and the req.params.id is a string.
         if (issue.id === parseInt(req.params.id)) {
-          // send the data to gitlab api.
+          // send the data to gitlab API.
           const url = `https://gitlab.lnu.se/api/v4/projects/${process.env.PROJECT_ID}/issues/${issue.iid}`
           await fetch(url, {
             method: 'PUT',
@@ -152,7 +148,7 @@ export class IssuesController {
         }
       }
 
-      // redirect to the issues page if the issue is closed, three steps back.
+      // redirect to the issues page if the issue is closed.
       res.redirect('..')
     } catch (error) {
       console.error(error)
@@ -192,7 +188,6 @@ export class IssuesController {
    */
   async updateIssue (req, res, next) {
     try {
-      console.log('update issue')
       const json = await this.fetchData()
       for (const issue of json) {
         if (issue.id === parseInt(req.params.id)) {
@@ -211,12 +206,10 @@ export class IssuesController {
             })
           })
           // Socket.IO: Send the created issue to all subscribers.
-          // Emit when you close an issue.
           res.io.emit('issues/index', issue)
         }
       }
-      // redirect to the issues page when the issue is re-opened.
-      // works for dev and prod.
+      // Redirect to the issues page when the issue is re-opened.
       res.redirect('..')
     } catch (error) {
       console.error(error)
