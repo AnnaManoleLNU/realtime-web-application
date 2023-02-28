@@ -106,6 +106,7 @@ export class IssuesController {
             title: issue.title,
             description: issue.description,
             image: issue.author.avatar_url,
+            author: issue.author.name,
             id: issue.id,
             state: issue.state
           }

@@ -1,10 +1,10 @@
-<h1>Update issue</h1>
+<h3><%= viewData.title %></h3>
 <br>
 <img src="<%= viewData.image %>" alt="User avatar">
-
 <br>
 <br>
-
+<p><em>Created by: <%= viewData.author %>.</em></p>
+<p><em>Status: <%= viewData.state %>.</em></p>
 <!-- If it's open, run the close method -->
 <% if (viewData?.state === 'opened') { %>
   <form class="row g-3" method="post" action="./issues/<%= viewData?.id %>/close">
